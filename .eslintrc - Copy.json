@@ -1,0 +1,34 @@
+{
+	"env": {
+        "es6": true,
+        "node": true
+    },
+	"extends": "airbnb-base",	
+	"rules": {
+        "indent": [
+            "error",
+            "tab"
+        ],
+        "linebreak-style": [
+            "error",
+            "windows"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+		],
+		"no-tabs": [
+			"off"
+		],
+		"object-shorthand": [
+			"off"
+		],
+		"func-names": [
+			"off"
+		]
+    }
+}

@@ -6,6 +6,10 @@ const Inert = require('inert');
 
 const uuid = require('uuid');
 
+const jade = require('jade');
+
+const hanlebars = require('handlebars');
+
 let cards = {};
 
 // Create a server with a host and port
@@ -13,6 +17,14 @@ const server = new Hapi.Server();
 server.connection({
 	host: 'localhost',
 	port: 8000,
+});
+
+server.views({
+	engines: {
+		html: jade,
+		hanlebars: hanlebars,
+	},
+	path: './templates',
 });
 
 // Add route 2
@@ -57,9 +69,9 @@ function saveCard(card) {
 function newCardHandler(request, reply) {
 	// business logic
 	if (request.method === 'get') {
-		reply.file('templates/new.html');
+		reply.view('new');
 	} else {
-		let card = {
+		const card = {
 			name: request.payload.name,
 			recipient_email: request.payload.recipient_email,
 			sender_name: request.payload.sender_name,
