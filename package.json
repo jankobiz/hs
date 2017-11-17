@@ -20,7 +20,9 @@
     "inert": "^4.2.1",
     "install": "^0.10.1",
     "jade": "^1.11.0",
-    "uuid": "^3.1.0"
+    "joi": "^13.0.2",
+    "uuid": "^3.1.0",
+    "vision": "^4.1.1"
   },
   "devDependencies": {
     "eslint-config-airbnb-base": "^12.1.0",
