@@ -4,6 +4,8 @@ const Vision = require('vision');
 const Hanlebars = require('handlebars');
 const Good = require('good');
 const Routes = require('./lib/routes');
+const CardStore = require('./lib/cardStore');
+const HapiAuthCookies = require('hapi-auth-cookie');
 
 const goodOptions = {
 	ops: {
@@ -45,7 +47,7 @@ const goodOptions = {
 	},
 };
 
-// cards = {};
+CardStore.initialize();
 
 // Create a server with a host and port
 const server = new Hapi.Server();
@@ -56,15 +58,29 @@ server.connection({
 
 
 const provision = async () => {
-	await server.register({
-		register: Good,
-		options: goodOptions,
-	}, (err) => {
-		if (err) {
-			console.error(err);
-		}
+	await server.register([
+		{
+			register: Inert,
+		},
+		{
+			register: Vision,
+		},
+		{
+			register: Good,
+			options: goodOptions,
+		},
+		{
+			register: HapiAuthCookies,
+		},
+	], (err) => {
+		if (err) console.error(err);
+		server.auth.strategy('strategyname', 'cookie', {
+			password: 'pass',
+			redirectTo: '/login',
+			isSecure: false,
+		});
+		server.auth.default('strategyname');
 	});
-	await server.register(Vision);
 
 	server.views({
 		engines: { html: Hanlebars },
@@ -106,31 +122,6 @@ server.ext('onPreResponse', (request, reply) => {
 		return reply.view('error', request.response);
 	}
 	return reply.continue();
-});
-
-// Add route 1
-server.register(Inert, () => {
-	server.route({
-		method: 'GET',
-		path: '/',
-		handler: {
-			file: 'templates/index.html',
-		},
-	});
-});
-
-// Add route 3 - directory exposure
-server.register(Inert, () => {
-	server.route({
-		method: 'GET',
-		path: '/assets/{path*}',
-		handler: {
-			directory: {
-				path: './public',
-				listing: false,
-			},
-		},
-	});
 });
 
 // server.route({
