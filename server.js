@@ -5,6 +5,7 @@ const Hanlebars = require('handlebars');
 const Good = require('good');
 const Routes = require('./lib/routes');
 const CardStore = require('./lib/cardStore');
+const UserStore = require('./lib/userStore');
 const HapiAuthCookies = require('hapi-auth-cookie');
 
 const goodOptions = {
@@ -48,6 +49,7 @@ const goodOptions = {
 };
 
 CardStore.initialize();
+UserStore.initialize();
 
 // Create a server with a host and port
 const server = new Hapi.Server();
@@ -74,12 +76,14 @@ const provision = async () => {
 		},
 	], (err) => {
 		if (err) console.error(err);
-		server.auth.strategy('strategyname', 'cookie', {
-			password: 'pass',
+		server.auth.strategy('session', 'cookie', {
+			password: 'this-password-has-to-be-at-least-32-chars-long',
+			cookie: 'sid-example',
 			redirectTo: '/login',
 			isSecure: false,
+			domain: 'localhost',
 		});
-		server.auth.default('strategyname');
+		server.auth.default('session');
 	});
 
 	server.views({
