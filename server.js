@@ -146,9 +146,9 @@ server.ext('onPreResponse', (request, reply) => {
 // });
 
 // Start the server
-server.start((err) => {
-	if (err) {
-		throw err;
-	}
-	console.log('Server running at:', server.info.uri);
-});
+// server.start((err) => {
+// 	if (err) {
+// 		throw err;
+// 	}
+// 	console.log('Server running at:', server.info.uri);
+// });
